@@ -1,0 +1,95 @@
+using System; 
+using System.Collections.Generic; 
+using System.Diagnostics.Eventing.Reader; 
+using System.Linq; 
+using System.Text; 
+using System.Threading.Tasks; 
+using static ConsoleApp5.students; 
+ 
+namespace ConsoleApp5 
+{ 
+ 
+    public class student 
+    { 
+        public string name { get; set; } 
+        public int score { get; set; } 
+        public student(string namee, int scoree) 
+        { 
+            name = namee; 
+            score = scoree; 
+ 
+        } 
+ 
+    } 
+ 
+    public class students 
+    { 
+        public delegate bool studentsdfilterdelegate(student studentt); 
+        public List<student> studentt = new List<student>(); 
+        public students() 
+        { 
+            studentt.Add(new student("gyed", 36)); 
+            studentt.Add(new student("nour", 77)); 
+            studentt.Add(new student("ali", 90)); 
+            studentt.Add(new student("hamdy", 43)); 
+            studentt.Add(new student("mohsen", 58)); 
+            studentt.Add(new student("mostafa", 87)); 
+            studentt.Add(new student("rashad", 30)); 
+        } 
+        public void studentsfilter(studentsdfilterdelegate filterdelegate) 
+        { 
+            foreach (student t in studentt) 
+            { 
+                if (filterdelegate(t)) 
+                { 
+                    Console.WriteLine(t.name); 
+                } 
+ 
+            } 
+        } 
+    } 
+        public static class Standard 
+        { 
+            public static double average(List<student> students) 
+            { 
+                return students.Average(s => s.score); 
+            } 
+        } 
+ 
+        public static class StudentExtensions 
+        { 
+            public static void PrintStudentList(List<student> studentt) 
+            { 
+                foreach (var student in studentt) 
+                { 
+                    Console.WriteLine($"{student.name}: {student.score}"); 
+                } 
+            } 
+            public static student TopScorer(List<student> studentt) 
+            { 
+                return studentt.OrderByDescending(s => s.score).First(); 
+            } 
+        } 
+     
+        internal class Program 
+        { 
+            static void Main(string[] args) 
+ 
+            { 
+ 
+ 
+                students s = new students(); 
+ 
+                Console.WriteLine("passing student"); 
+                s.studentsfilter(delegate (student studentt) { return studentt.score > 50; }); 
+                Console.WriteLine("____________________________________________________"); 
+                Console.WriteLine("failed student"); 
+                s.studentsfilter(delegate (student studentt) { return studentt.score < 50; }); 
+                Console.WriteLine("______________________________________________________"); 
+                Console.WriteLine("\nAverage Score: " + Standard.average(s.studentt)); 
+                Console.WriteLine("\nTop Scorer: " + students.TopScorer(s.studentt).name); 
+ 
+            } 
+        } 
+     
+}
